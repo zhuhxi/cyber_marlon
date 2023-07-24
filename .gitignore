@@ -1,5 +1,4 @@
 Model/
-.vscode
 cyberbattle/__pycache__/__init__.cpython-39.pyc
 marlon/baseline_models/multiagent/__pycache__/baseline_marlon_agent.cpython-39.pyc
 marlon/baseline_models/multiagent/__pycache__/multiagent_universe.cpython-39.pyc
