@@ -16,6 +16,16 @@ parser.add_argument('--iteration_count', default=2000, type=int)
 parser.add_argument('--defender_maintain_sla', default=0.5, type=float)
 parser.add_argument('--with_defender', default=0, type=int)
 parser.add_argument('--defender_reset', default=0, type=int)
+parser.add_argument('--ownership_goal', default=0.6, type=float)
+parser.add_argument('--winning_reward', default=300, type=int)
+parser.add_argument('--drl_max_node_cnt', default=10, type=int)
+parser.add_argument('--local_vuls_lib_cnt', default=3, type=int)
+parser.add_argument('--remote_vuls_lib_cnt', default=8, type=int)
+parser.add_argument('--ports_lib_cnt', default=7, type=int)
+parser.add_argument('--maximum_total_credentials', default=5, type=int)
+parser.add_argument('--env_id', default='ctf', type=str)
+parser.add_argument('--env_index', default='0', type=int)
+parser.add_argument('--gpu_device', default=1, type=int)
 args = parser.parse_args()
 args.env_name = f"{args.env_name}_alg_{args.alg_type}_defender{args.with_defender}_defender_goal_{args.defender_maintain_sla}"
 
@@ -32,7 +42,7 @@ EVALUATE_EPISODES = args.eval_episodes
 
 def train(evaluate_after=False):
     universe = MultiAgentUniverse.build(
-        env_id='CyberBattleToyCtf-v0',
+        env_id=args.env_id,
         attacker_builder=BaselineAgentBuilder(
             alg_type=PPO if args.alg_type == 'ppo' else A2C,
             policy='MultiInputPolicy',
@@ -49,7 +59,8 @@ def train(evaluate_after=False):
         defender_reset_on_constraint_broken=DEFENDER_RESET_ON_CONSTRAINT_BROKEN,
         attacker_loss_reward=0,
         defender_loss_reward=0,
-        defender_maintain_sla=args.defender_maintain_sla
+        defender_maintain_sla=args.defender_maintain_sla,
+        args=args
     )
 
     universe.learn(
@@ -76,7 +87,7 @@ def setup_seed(random_seed):
     if th.cuda.is_available():
         th.cuda.manual_seed_all(random_seed)
         th.cuda.manual_seed(random_seed)
-        th.cuda.set_device(1)
+        th.cuda.set_device(args.gpu_device)
 
 if __name__ == '__main__':
     setup_seed(args.random_seed)

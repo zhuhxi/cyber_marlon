@@ -9,6 +9,7 @@ import gym
 from stable_baselines3.common.type_aliases import GymEnv
 
 from cyberbattle._env.cyberbattle_env import DefenderConstraint
+from cyberbattle._env import cyberbattle_env
 from marlon.baseline_models.env_wrappers.environment_event_source import EnvironmentEventSource
 
 from marlon.baseline_models.env_wrappers.attack_wrapper import AttackerEnvWrapper
@@ -57,7 +58,8 @@ class MultiAgentUniverse:
         attacker_loss_reward: float = -5000.0,
         defender_loss_reward: float = -5000.0,
         defender_maintain_sla: float = 0.60,
-        defender_reset_on_constraint_broken: bool = True):
+        defender_reset_on_constraint_broken: bool = True,
+        args=None):
         '''
         Static factory method to create a MultiAgentUniverse with the given options.
 
@@ -98,13 +100,21 @@ class MultiAgentUniverse:
         logger.addHandler(console_handler)
 
         if defender_builder:
-            cyber_env = gym.make(
-                env_id,
-                defender_constraint=DefenderConstraint(maintain_sla=defender_maintain_sla),
-                losing_reward = defender_loss_reward,
-                config_list=[3, 8, 7])
+            gym_name = f'PchLocalvuls{args.local_vuls_lib_cnt}Remotevuls{args.remote_vuls_lib_cnt}Ports{args.ports_lib_cnt}' if args.env_id == 'pch' else f'CtfLocalvuls{args.local_vuls_lib_cnt}Remotevuls{args.remote_vuls_lib_cnt}Ports{args.ports_lib_cnt}'
+            cyber_env = gym.make(f'{gym_name}-v{args.env_index}',
+                          attacker_goal=cyberbattle_env.AttackerGoal(own_atleast_percent=args.ownership_goal),
+                          # step_cost=args.step_cost,
+                          winning_reward=args.winning_reward,
+                          defender_constraint=DefenderConstraint(maintain_sla=defender_maintain_sla),
+                          losing_reward = defender_loss_reward,
+                          maximum_node_count=args.drl_max_node_cnt)
         else:
-            cyber_env = gym.make(env_id, config_list=[3, 8, 7])
+            gym_name = f'PchLocalvuls{args.local_vuls_lib_cnt}Remotevuls{args.remote_vuls_lib_cnt}Ports{args.ports_lib_cnt}' if args.env_id == 'pch' else f'CtfLocalvuls{args.local_vuls_lib_cnt}Remotevuls{args.remote_vuls_lib_cnt}Ports{args.ports_lib_cnt}'
+            cyber_env = gym.make(f'{gym_name}-v{args.env_index}',
+                          attacker_goal=cyberbattle_env.AttackerGoal(own_atleast_percent=args.ownership_goal),
+                          # step_cost=args.step_cost,
+                          winning_reward=args.winning_reward,
+                          maximum_node_count=args.drl_max_node_cnt)
 
         event_source = EnvironmentEventSource()
 

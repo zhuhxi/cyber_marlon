@@ -170,3 +170,23 @@ register(
             'maximum_total_credentials': 50000
             }
 )
+
+ctf_envs = [(f'CtfLocalvuls{i}Remotevuls{j}Ports{k}-v0', [i, j, k]) for i in [1, 3, 5, 7, 10] for j in [4, 8, 10, 15, 20] for k in [4, 7, 10, 20, 30]]
+for (index, env_tup) in enumerate(ctf_envs):
+    env, config_list = env_tup[0], env_tup[1]
+    if env in registry.env_specs:
+        del registry.env_specs[env]
+
+    register(
+        id=env,
+        cyberbattle_env_identifiers=toy_ctf.generate_env_identifiers(config_list=config_list),
+        entry_point='cyberbattle._env.cyberbattle_toyctf:CyberBattleToyCtf',
+        kwargs={
+            'config_list': config_list,
+            'defender_agent': None,
+            'attacker_goal': AttackerGoal(own_atleast=6),
+            'defender_goal': DefenderGoal(eviction=True),
+            'maximum_node_count': 30,
+        },
+        # max_episode_steps=2600,
+    )
