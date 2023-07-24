@@ -14,8 +14,8 @@ parser.add_argument('--eval_episodes', default=5, type=int)
 parser.add_argument('--training_episode_count', default=50000, type=int)
 parser.add_argument('--iteration_count', default=2000, type=int)
 parser.add_argument('--defender_maintain_sla', default=0.5, type=float)
-parser.add_argument('--with_defender', default=False, type=bool)
-parser.add_argument('--defender_reset', default=False, type=bool)
+parser.add_argument('--with_defender', default=0, type=int)
+parser.add_argument('--defender_reset', default=0, type=int)
 args = parser.parse_args()
 args.env_name = f"{args.env_name}_alg_{args.alg_type}_defender{args.with_defender}_defender_goal_{args.defender_maintain_sla}"
 
@@ -42,7 +42,7 @@ def train(evaluate_after=False):
             alg_type=PPO if args.alg_type == 'ppo' else A2C,
             policy='MultiInputPolicy',
             env_name=args.env_name
-        ) if args.with_defender else None,
+        ) if args.with_defender == 1 else None,
         attacker_invalid_action_reward_modifier=ATTACKER_INVALID_ACTION_REWARD_MODIFIER,
         attacker_invalid_action_reward_multiplier=ATTACKER_INVALID_ACTION_REWARD_MULTIPLIER,
         defender_invalid_action_reward_modifier=DEFENDER_INVALID_ACTION_REWARD,

@@ -10,13 +10,15 @@
             "request": "launch",
             "program": "${workspaceFolder}/scripts/train_marl_ppo.py",
             "args": [
-                "--env_name=7_23_ppo_no_defender",
+                "--env_name=7_23_ppo_no_defender_debug",
                 "--random_seed=1", 
                 "--alg_type=ppo",
                 "--eval_episodes=5",
                 "--training_episode_count=50000", 
                 "--iteration_count=2000", 
-                "--defender_maintain_sla=0.5",
+                "--defender_maintain_sla=0.6",
+                "--with_defender=0",
+                "--defender_reset=1",
             ],
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}"
