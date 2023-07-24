@@ -30,9 +30,8 @@ args = parser.parse_args()
 args.env_name = f"{args.env_name}_alg_{args.alg_type}_defender{args.with_defender}_defender_goal_{args.defender_maintain_sla}"
 
 
+EVAL_EPISODES = args.eval_episodes
 LEARN_EPISODES = args.training_episode_count
-LEARN_TIMESTEPS = args.training_episode_count * args.iteration_count
-# Set this to a large value to stop at LEARN_TIMESTEPS instead.
 ATTACKER_INVALID_ACTION_REWARD_MODIFIER = 0
 ATTACKER_INVALID_ACTION_REWARD_MULTIPLIER = 0
 DEFENDER_INVALID_ACTION_REWARD = 0 # -1
@@ -64,8 +63,8 @@ def train(evaluate_after=False):
     )
 
     universe.learn(
-        total_timesteps=LEARN_TIMESTEPS,
-        n_eval_episodes=LEARN_EPISODES
+        total_timesteps=LEARN_EPISODES,
+        n_eval_episodes=EVAL_EPISODES
     )
 
     if evaluate_after:

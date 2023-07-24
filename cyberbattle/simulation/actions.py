@@ -390,7 +390,7 @@ class AgentActions:
         reward += newly_discovered_nodes * NODE_DISCOVERED_REWARD
         reward += newly_discovered_credentials * CREDENTIAL_DISCOVERED_REWARD
 
-        reward -= vulnerability.cost
+        # reward -= vulnerability.cost
 
         logger.info("GOT REWARD: " + vulnerability.reward_string)
         return True, ActionResult(reward=reward, outcome=outcome)
