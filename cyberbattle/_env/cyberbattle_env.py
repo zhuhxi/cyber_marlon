@@ -720,7 +720,7 @@ class CyberBattleEnv(gym.Env):
         elif "connect" in action:
             source_node, target_node, port_index, credential_cache_index = action["connect"]
             if credential_cache_index < 0 or credential_cache_index >= len(self.__credential_cache):
-                return actions.ActionResult(reward=-1, outcome=None)
+                return actions.ActionResult(reward=0, outcome=None)
 
             source_node_id = self.__internal_node_id_from_external_node_index(source_node)
             target_node_id = self.__internal_node_id_from_external_node_index(target_node)
