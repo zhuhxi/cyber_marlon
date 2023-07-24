@@ -1,6 +1,7 @@
 import logging
 import time
 from typing import Any, Optional, Tuple, Type
+import os
 
 import numpy as np
 from stable_baselines3 import A2C
@@ -21,14 +22,16 @@ from marlon.baseline_models.multiagent.multiagent_universe import AgentBuilder
 class BaselineAgentBuilder(AgentBuilder):
     '''Assists in creating BaselineMarlonAgents.'''
 
-    def __init__(self, alg_type: Type, policy: str):
+    def __init__(self, alg_type: Type, policy: str, env_name: str):
         assert issubclass(alg_type, OnPolicyAlgorithm), "Algorithm type must inherit OnPolicyAlgorithm."
 
         self.alg_type = alg_type
         self.policy = policy
+        self.path = os.path.dirname(os.path.abspath(__file__))
+        self.env_name = env_name
 
     def build(self, wrapper: GymEnv, logger: logging.Logger) -> MarlonAgent:
-        model = self.alg_type(self.policy, Monitor(wrapper), verbose=1, n_steps=2048, tensorboard_log='/home/zhx/word/work/MARLon/marlon_ppo_random')
+        model = self.alg_type(self.policy, Monitor(wrapper), verbose=1, n_steps=2048, tensorboard_log=self.path + '/../../../Model/'+self.env_name)
         return BaselineMarlonAgent(model, wrapper, logger)
 
 class LoadFileBaselineAgentBuilder(AgentBuilder):
