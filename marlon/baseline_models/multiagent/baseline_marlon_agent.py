@@ -31,7 +31,7 @@ class BaselineAgentBuilder(AgentBuilder):
         self.env_name = env_name
 
     def build(self, wrapper: GymEnv, logger: logging.Logger) -> MarlonAgent:
-        model = self.alg_type(self.policy, Monitor(wrapper), verbose=1, n_steps=2048, tensorboard_log=self.path + '/../../../Model/'+self.env_name)
+        model = self.alg_type(self.policy, Monitor(wrapper), verbose=1, n_steps=512, tensorboard_log=self.path + '/../../../Model/'+self.env_name)
         return BaselineMarlonAgent(model, wrapper, logger)
 
 class LoadFileBaselineAgentBuilder(AgentBuilder):
