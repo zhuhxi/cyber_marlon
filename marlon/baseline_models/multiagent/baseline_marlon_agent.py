@@ -22,16 +22,16 @@ from marlon.baseline_models.multiagent.multiagent_universe import AgentBuilder
 class BaselineAgentBuilder(AgentBuilder):
     '''Assists in creating BaselineMarlonAgents.'''
 
-    def __init__(self, alg_type: Type, policy: str, env_name: str):
+    def __init__(self, alg_type: Type, policy: str, args):
         assert issubclass(alg_type, OnPolicyAlgorithm), "Algorithm type must inherit OnPolicyAlgorithm."
 
         self.alg_type = alg_type
         self.policy = policy
         self.path = os.path.dirname(os.path.abspath(__file__))
-        self.env_name = env_name
+        self.args = args
 
     def build(self, wrapper: GymEnv, logger: logging.Logger) -> MarlonAgent:
-        model = self.alg_type(self.policy, Monitor(wrapper), verbose=1, n_steps=512, tensorboard_log=self.path + '/../../../Model/'+self.env_name)
+        model = self.alg_type(self.policy, Monitor(wrapper), verbose=1, n_steps=self.args.rollout_step, tensorboard_log=self.path + '/../../../Model/'+self.args.env_name)
         return BaselineMarlonAgent(model, wrapper, logger)
 
 class LoadFileBaselineAgentBuilder(AgentBuilder):

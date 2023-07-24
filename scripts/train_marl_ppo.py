@@ -24,7 +24,8 @@ parser.add_argument('--remote_vuls_lib_cnt', default=8, type=int)
 parser.add_argument('--maximum_total_credentials', default=5, type=int)
 parser.add_argument('--ports_lib_cnt', default=7, type=int)
 parser.add_argument('--env_id', default='ctf', type=str)
-parser.add_argument('--env_index', default='0', type=int)
+parser.add_argument('--env_index', default=0, type=int)
+parser.add_argument('--rollout_step', default=2048, type=int)
 parser.add_argument('--gpu_device', default=1, type=int)
 args = parser.parse_args()
 args.env_name = f"{args.env_name}_alg_{args.alg_type}_defender{args.with_defender}_defender_goal_{args.defender_maintain_sla}"
@@ -44,12 +45,12 @@ def train(evaluate_after=False):
         attacker_builder=BaselineAgentBuilder(
             alg_type=PPO if args.alg_type == 'ppo' else A2C,
             policy='MultiInputPolicy',
-            env_name=args.env_name
+            args=args
         ),
         defender_builder=BaselineAgentBuilder(
             alg_type=PPO if args.alg_type == 'ppo' else A2C,
             policy='MultiInputPolicy',
-            env_name=args.env_name
+            args=args
         ) if args.with_defender == 1 else None,
         attacker_invalid_action_reward_modifier=ATTACKER_INVALID_ACTION_REWARD_MODIFIER,
         attacker_invalid_action_reward_multiplier=ATTACKER_INVALID_ACTION_REWARD_MULTIPLIER,
