@@ -106,6 +106,7 @@ class MultiAgentUniverse:
                           # step_cost=args.step_cost,
                           winning_reward=args.winning_reward,
                           defender_constraint=DefenderConstraint(maintain_sla=defender_maintain_sla),
+                          maximum_total_credentials=args.maximum_total_credentials,
                           losing_reward = defender_loss_reward,
                           maximum_node_count=args.drl_max_node_cnt)
         else:
@@ -114,6 +115,7 @@ class MultiAgentUniverse:
                           attacker_goal=cyberbattle_env.AttackerGoal(own_atleast_percent=args.ownership_goal),
                           # step_cost=args.step_cost,
                           winning_reward=args.winning_reward,
+                          maximum_total_credentials=args.maximum_total_credentials,
                           maximum_node_count=args.drl_max_node_cnt)
 
         event_source = EnvironmentEventSource()
@@ -137,7 +139,7 @@ class MultiAgentUniverse:
                 max_timesteps=max_timesteps,
                 invalid_action_reward=defender_invalid_action_reward_modifier,
                 defender=True,
-                reset_on_constraint_broken=defender_reset_on_constraint_broken
+                reset_on_constraint_broken=defender_reset_on_constraint_broken,
             )
             defender_agent = defender_builder.build(defender_wrapper, logger)
 

@@ -21,8 +21,8 @@ parser.add_argument('--winning_reward', default=300, type=int)
 parser.add_argument('--drl_max_node_cnt', default=10, type=int)
 parser.add_argument('--local_vuls_lib_cnt', default=3, type=int)
 parser.add_argument('--remote_vuls_lib_cnt', default=8, type=int)
-parser.add_argument('--ports_lib_cnt', default=7, type=int)
 parser.add_argument('--maximum_total_credentials', default=5, type=int)
+parser.add_argument('--ports_lib_cnt', default=7, type=int)
 parser.add_argument('--env_id', default='ctf', type=str)
 parser.add_argument('--env_index', default='0', type=int)
 parser.add_argument('--gpu_device', default=1, type=int)
@@ -64,7 +64,7 @@ def train(evaluate_after=False):
 
     universe.learn(
         total_timesteps=LEARN_EPISODES,
-        n_eval_episodes=LEARN_EPISODES
+        n_eval_episodes=100000000,
     )
 
     if evaluate_after:
