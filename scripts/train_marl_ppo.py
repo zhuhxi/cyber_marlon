@@ -30,10 +30,7 @@ args = parser.parse_args()
 args.env_name = f"{args.env_name}_alg_{args.alg_type}_defender{args.with_defender}_defender_goal_{args.defender_maintain_sla}"
 
 
-# EVAL_EPISODES = args.eval_episodes
-# LEARN_EPISODES = args.training_episode_count
-EVAL_EPISODES = 500
-LEARN_EPISODES = 500
+LEARN_EPISODES = args.training_episode_count * args.iteration_count
 ATTACKER_INVALID_ACTION_REWARD_MODIFIER = 0
 ATTACKER_INVALID_ACTION_REWARD_MULTIPLIER = 0
 DEFENDER_INVALID_ACTION_REWARD = 0 # -1
@@ -61,17 +58,18 @@ def train(evaluate_after=False):
         attacker_loss_reward=0,
         defender_loss_reward=0,
         defender_maintain_sla=args.defender_maintain_sla,
+        max_timesteps=args.iteration_count,
         args=args
     )
 
     universe.learn(
         total_timesteps=LEARN_EPISODES,
-        n_eval_episodes=EVAL_EPISODES
+        n_eval_episodes=LEARN_EPISODES
     )
 
     if evaluate_after:
         universe.evaluate(
-            n_episodes=EVALUATE_EPISODES
+            n_episodes=args.eval_episodes
         )
 
 def setup_seed(random_seed):
