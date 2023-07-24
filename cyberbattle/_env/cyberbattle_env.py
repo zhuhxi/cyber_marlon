@@ -1048,11 +1048,11 @@ class CyberBattleEnv(gym.Env):
         nodes_owned = self.__get__owned_nodes_indices()
         owned_count = len(nodes_owned)
 
-        # if owned_count < goal.own_atleast:
-        #     return False
-
-        if owned_count / self.__node_count < goal.own_atleast_percent:
+        if owned_count < goal.own_atleast:
             return False
+
+        # if owned_count / self.__node_count < goal.own_atleast_percent:
+        #     return False
 
         if self.__defender_agent is not None and \
                 self._defender_actuator.network_availability >= goal.low_availability:

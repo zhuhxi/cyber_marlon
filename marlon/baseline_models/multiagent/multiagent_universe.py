@@ -100,23 +100,13 @@ class MultiAgentUniverse:
         logger.addHandler(console_handler)
 
         if defender_builder:
-            gym_name = f'PchLocalvuls{args.local_vuls_lib_cnt}Remotevuls{args.remote_vuls_lib_cnt}Ports{args.ports_lib_cnt}' if args.env_id == 'pch' else f'CtfLocalvuls{args.local_vuls_lib_cnt}Remotevuls{args.remote_vuls_lib_cnt}Ports{args.ports_lib_cnt}'
-            cyber_env = gym.make(f'{gym_name}-v{args.env_index}',
-                          attacker_goal=cyberbattle_env.AttackerGoal(own_atleast_percent=args.ownership_goal),
-                          # step_cost=args.step_cost,
-                          winning_reward=args.winning_reward,
-                          defender_constraint=DefenderConstraint(maintain_sla=defender_maintain_sla),
-                          maximum_total_credentials=args.maximum_total_credentials,
-                          losing_reward = defender_loss_reward,
-                          maximum_node_count=args.drl_max_node_cnt)
+            cyber_env = gym.make(
+                env_id,
+                defender_constraint=DefenderConstraint(maintain_sla=defender_maintain_sla),
+                losing_reward = defender_loss_reward,
+                config_list=[3, 8, 7])
         else:
-            gym_name = f'PchLocalvuls{args.local_vuls_lib_cnt}Remotevuls{args.remote_vuls_lib_cnt}Ports{args.ports_lib_cnt}' if args.env_id == 'pch' else f'CtfLocalvuls{args.local_vuls_lib_cnt}Remotevuls{args.remote_vuls_lib_cnt}Ports{args.ports_lib_cnt}'
-            cyber_env = gym.make(f'{gym_name}-v{args.env_index}',
-                          attacker_goal=cyberbattle_env.AttackerGoal(own_atleast_percent=args.ownership_goal),
-                          # step_cost=args.step_cost,
-                          winning_reward=args.winning_reward,
-                          maximum_total_credentials=args.maximum_total_credentials,
-                          maximum_node_count=args.drl_max_node_cnt)
+            cyber_env = gym.make(env_id, config_list=[3, 8, 7])
 
         event_source = EnvironmentEventSource()
 
