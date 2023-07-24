@@ -30,8 +30,10 @@ args = parser.parse_args()
 args.env_name = f"{args.env_name}_alg_{args.alg_type}_defender{args.with_defender}_defender_goal_{args.defender_maintain_sla}"
 
 
-EVAL_EPISODES = args.eval_episodes
-LEARN_EPISODES = args.training_episode_count
+# EVAL_EPISODES = args.eval_episodes
+# LEARN_EPISODES = args.training_episode_count
+EVAL_EPISODES = 500
+LEARN_EPISODES = 500
 ATTACKER_INVALID_ACTION_REWARD_MODIFIER = 0
 ATTACKER_INVALID_ACTION_REWARD_MULTIPLIER = 0
 DEFENDER_INVALID_ACTION_REWARD = 0 # -1
