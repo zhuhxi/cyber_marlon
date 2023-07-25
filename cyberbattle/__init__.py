@@ -58,7 +58,7 @@ register(
     cyberbattle_env_identifiers=toy_ctf.ENV_IDENTIFIERS,
     entry_point='cyberbattle._env.cyberbattle_toyctf:CyberBattleToyCtf',
     kwargs={'defender_agent': None,
-            'attacker_goal': AttackerGoal(own_atleast=6),
+            'attacker_goal': AttackerGoal(own_atleast=5),
             'defender_goal': DefenderGoal(eviction=True)
             },
     # max_episode_steps=2600,
